@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -36,6 +37,10 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (args.length < 3) {
+            throw new WrongUsageException(getUsage(sender), new Object[0]);
+        }
+
         BlockPos basePos = sender.getPosition();
         BlockPos pos = new BlockPos(
                 parseDouble((double)basePos.getX(), args[0], false),
