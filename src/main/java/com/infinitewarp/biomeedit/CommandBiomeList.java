@@ -1,5 +1,6 @@
 package com.infinitewarp.biomeedit;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -9,10 +10,9 @@ import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class CommandBiomeList implements ICommand {
+public class CommandBiomeList extends CommandBase implements ICommand {
 
     @Override
     public String getName() {
@@ -25,8 +25,9 @@ public class CommandBiomeList implements ICommand {
     }
 
     @Override
-    public List<String> getAliases() {
-        return Arrays.asList(new String[] { });
+    public int getRequiredPermissionLevel()
+    {
+        return 0;
     }
 
     @Override
@@ -36,25 +37,10 @@ public class CommandBiomeList implements ICommand {
     }
 
     @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
-    }
-
-    @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 3) {
             return BiomeEditMod.getBiomeNames();
         }
         return new ArrayList<>();
-    }
-
-    @Override
-    public boolean isUsernameIndex(String[] args, int index) {
-        return false;
-    }
-
-    @Override
-    public int compareTo(ICommand o) {
-        return 0;
     }
 }

@@ -15,7 +15,6 @@ import net.minecraft.world.chunk.Chunk;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandBiomeSet extends CommandBase implements ICommand {
@@ -31,8 +30,9 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
     }
 
     @Override
-    public List<String> getAliases() {
-        return Arrays.asList(new String[]{});
+    public int getRequiredPermissionLevel()
+    {
+        return 3; // limits to op or console user
     }
 
     @Override
@@ -117,27 +117,11 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
         };
     }
 
-    public int getRequiredPermissionLevel()
-    {
-        // 3 appears to be equivalent to "op" or "creative".
-        return 3;
-    }
-
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 5) {
             return BiomeEditMod.getBiomeNames(args[4]);
         }
         return new ArrayList<>();
-    }
-
-    @Override
-    public boolean isUsernameIndex(String[] args, int index) {
-        return false;
-    }
-
-    @Override
-    public int compareTo(ICommand o) {
-        return 0;
     }
 }
