@@ -1,11 +1,17 @@
 package com.infinitewarp.biomeedit;
 
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 @Mod(modid = BiomeEditMod.MODID, name = BiomeEditMod.NAME, version = BiomeEditMod.VERSION, serverSideOnly=true, acceptableRemoteVersions="*")
 public class BiomeEditMod
@@ -16,6 +22,8 @@ public class BiomeEditMod
 
     private static Logger logger;
 
+    private static List<String> biomeNames = new ArrayList<String>();
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -25,6 +33,10 @@ public class BiomeEditMod
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
+        for (Iterator<Biome> iterator = Biome.REGISTRY.iterator(); iterator.hasNext();) {
+            Biome biome = iterator.next();
+            biomeNames.add(String.valueOf(Biome.REGISTRY.getNameForObject(biome)));
+        }
         logger.info("BiomeEdit get hype!");
     }
 
@@ -32,6 +44,11 @@ public class BiomeEditMod
     public void serverLoad(FMLServerStartingEvent event)
     {
         event.registerServerCommand(new CommandBiomeGet());
+        event.registerServerCommand(new CommandBiomeList());
         event.registerServerCommand(new CommandBiomeSet());
+    }
+
+    public static List<String> getBiomeNames() {
+        return Collections.unmodifiableList(biomeNames);
     }
 }
