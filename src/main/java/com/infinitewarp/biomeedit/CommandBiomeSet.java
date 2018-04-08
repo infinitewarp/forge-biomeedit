@@ -1,5 +1,6 @@
 package com.infinitewarp.biomeedit;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandBiomeSet implements ICommand {
+public class CommandBiomeSet extends CommandBase implements ICommand {
 
     @Override
     public String getName() {
@@ -35,14 +36,17 @@ public class CommandBiomeSet implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        World world = sender.getEntityWorld();
-        int x = Integer.parseInt(args[0]);
-        int z = Integer.parseInt(args[1]);
-        BlockPos pos = new BlockPos(x, 1, z);
+        BlockPos basePos = sender.getPosition();
+        BlockPos pos = new BlockPos(
+                parseDouble((double)basePos.getX(), args[0], false),
+                (double)basePos.getY(),
+                parseDouble((double)basePos.getZ(), args[1], false)
+        );
 
+        World world = sender.getEntityWorld();
         Chunk chunk = world.getChunkFromBlockCoords(pos);
         byte[] biomeArray = chunk.getBiomeArray();
-        int biomeArrayPos = (z & 15) << 4 | (x & 15);
+        int biomeArrayPos = (pos.getZ() & 15) << 4 | (pos.getX() & 15);
 
         Biome newBiome = Biome.REGISTRY.getObject(new ResourceLocation(args[2]));
         String newbiomeName = String.valueOf(Biome.REGISTRY.getNameForObject(newBiome));
@@ -51,7 +55,7 @@ public class CommandBiomeSet implements ICommand {
         chunk.setBiomeArray(biomeArray);
         chunk.markDirty();
 
-        sender.sendMessage(new TextComponentString(String.format("biome at (%s, %s) is now %s", x, z, newbiomeName)));
+        sender.sendMessage(new TextComponentString(String.format("biome at (%s, %s) is now %s", pos.getX(), pos.getZ(), newbiomeName)));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.infinitewarp.biomeedit;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandBiomeGet implements ICommand {
+public class CommandBiomeGet extends CommandBase implements ICommand {
 
     @Override
     public String getName() {
@@ -33,16 +34,19 @@ public class CommandBiomeGet implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        World world = sender.getEntityWorld();
-        int x = new Integer(args[0]);
-        int z = new Integer(args[1]);
-        BlockPos pos = new BlockPos(x, 1, z);
+        BlockPos basePos = sender.getPosition();
+        BlockPos pos = new BlockPos(
+                parseDouble((double)basePos.getX(), args[0], false),
+                (double)basePos.getY(),
+                parseDouble((double)basePos.getZ(), args[1], false)
+        );
 
+        World world = sender.getEntityWorld();
 //        TODO why is getBiomeName broken? It throws java.lang.NoSuchMethodError: net.minecraft.world.biome.Biome.getBiomeName()Ljava/lang/String
 //        String biomeName = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider()).getBiomeName();
         Biome biome = world.getChunkFromBlockCoords(pos).getBiome(pos, world.getBiomeProvider());
         String biomeName = String.valueOf(Biome.REGISTRY.getNameForObject(biome));
-        sender.sendMessage(new TextComponentString(String.format("biome at (%s, %s) is %s", x, z, biomeName)));
+        sender.sendMessage(new TextComponentString(String.format("biome at (%s, %s) is %s", pos.getX(), pos.getZ(), biomeName)));
     }
 
     @Override
