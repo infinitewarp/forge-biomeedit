@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class CommandBiomeGet implements ICommand {
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

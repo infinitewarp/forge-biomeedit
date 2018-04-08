@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +42,10 @@ public class CommandBiomeList implements ICommand {
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        return null;
+        if (args.length == 3) {
+            return BiomeEditMod.getBiomeNames();
+        }
+        return new ArrayList<>();
     }
 
     @Override
