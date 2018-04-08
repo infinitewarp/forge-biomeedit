@@ -27,7 +27,7 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/biomeset <x> <z> <biomename> set specified biome at coordinate (x,z)";
+        return "/biomeset <x1> <z1> <x2> <z2> <biomename> set specified biome over region x1,z1 to x2,z2";
     }
 
     @Override
@@ -37,30 +37,84 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length < 3) {
+        if (args.length < 5) {
             throw new WrongUsageException(getUsage(sender), new Object[0]);
         }
 
+        // Verify the input has a legal biome name first.
+        String newBiomeName = args[4];
+        Biome newBiome;
+        try {
+            newBiome = Biome.REGISTRY.getObject(new ResourceLocation(newBiomeName));
+        } catch (NullPointerException e) {
+            throw new WrongUsageException(String.format("biome '%s' not found", newBiomeName), new Object[0]);
+        }
+        byte biomeIdAsByte = (byte) Biome.REGISTRY.getIDForObject(newBiome);
+
+        // Build start and end positions from inputs and order them appropriately.
+        BlockPos[] poses = getStartEndPos(sender, args);
+        BlockPos start = poses[0];
+        BlockPos end = poses[1];
+
+        World world = sender.getEntityWorld();
+
+        // Iterate to find all chunks touched by the selection.
+        for (int chunkX = (start.getX() >> 4); chunkX <= (end.getX() >> 4); chunkX++) {
+            for (int chunkZ = (start.getZ() >> 4); chunkZ <= (end.getZ() >> 4); chunkZ++) {
+                Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
+                byte[] biomeArray = chunk.getBiomeArray();
+                // Iterate through all possible positions in the current chunk.
+                for (int posX = (chunkX << 4); posX < (chunkX+1 << 4); posX++) {
+                    for (int posZ = (chunkZ << 4); posZ < (chunkZ+1 << 4); posZ++) {
+                        // Set the position's biome if the position is in our region.
+                        if (posX >= start.getX() && posX <= end.getX() && posZ >= start.getZ() && posZ <= end.getZ()) {
+                            int biomeArrayPos = (posZ & 15) << 4 | (posX & 15);
+                            biomeArray[biomeArrayPos] = biomeIdAsByte;
+                            // sender.sendMessage(new TextComponentString(String.format("set %s at x=%s,z=%s", newBiomeName, posX, posZ)));
+                            System.out.println(String.format("set %s at x=%s,z=%s", newBiomeName, posX, posZ));
+                        }
+                    }
+                }
+                // Push the updated biome array into the chunk and mark for saving.
+                chunk.setBiomeArray(biomeArray);
+                chunk.markDirty();
+            }
+        }
+
+        sender.sendMessage(new TextComponentString(String.format("biome set to %s", newBiomeName)));
+    }
+
+    private BlockPos[] getStartEndPos(ICommandSender sender, String[] args) throws CommandException {
         BlockPos basePos = sender.getPosition();
-        BlockPos pos = new BlockPos(
+        BlockPos pos1 = new BlockPos(
                 parseDouble((double)basePos.getX(), args[0], false),
                 (double)basePos.getY(),
                 parseDouble((double)basePos.getZ(), args[1], false)
         );
+        BlockPos pos2 = new BlockPos(
+                parseDouble((double)basePos.getX(), args[2], false),
+                (double)basePos.getY(),
+                parseDouble((double)basePos.getZ(), args[3], false)
+        );
 
-        World world = sender.getEntityWorld();
-        Chunk chunk = world.getChunkFromBlockCoords(pos);
-        byte[] biomeArray = chunk.getBiomeArray();
-        int biomeArrayPos = (pos.getZ() & 15) << 4 | (pos.getX() & 15);
+        int startX = pos1.getX();
+        int endX = pos2.getX();
+        if (pos2.getX() < startX) {
+            startX = endX;
+            endX = pos1.getX();
+        }
 
-        Biome newBiome = Biome.REGISTRY.getObject(new ResourceLocation(args[2]));
-        String newbiomeName = String.valueOf(Biome.REGISTRY.getNameForObject(newBiome));
+        int startZ = pos1.getZ();
+        int endZ = pos2.getZ();
+        if (pos2.getZ() < startZ) {
+            startZ = endZ;
+            endZ = pos1.getZ();
+        }
 
-        biomeArray[biomeArrayPos] = (byte) Biome.REGISTRY.getIDForObject(newBiome);
-        chunk.setBiomeArray(biomeArray);
-        chunk.markDirty();
-
-        sender.sendMessage(new TextComponentString(String.format("biome at (%s, %s) is now %s", pos.getX(), pos.getZ(), newbiomeName)));
+        return new BlockPos[] {
+                new BlockPos(startX, basePos.getY(), startZ),
+                new BlockPos(endX, basePos.getY(), endZ)
+        };
     }
 
     @Override
@@ -70,7 +124,7 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        if (args.length == 3) {
+        if (args.length == 5) {
             return BiomeEditMod.getBiomeNames();
         }
         return new ArrayList<>();
