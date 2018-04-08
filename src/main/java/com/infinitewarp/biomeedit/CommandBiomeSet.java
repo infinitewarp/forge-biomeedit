@@ -117,9 +117,10 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
         };
     }
 
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
+    public int getRequiredPermissionLevel()
+    {
+        // 3 appears to be equivalent to "op" or "creative".
+        return 3;
     }
 
     @Override
