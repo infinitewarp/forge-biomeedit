@@ -1,0 +1,16 @@
+[
+{
+  "modid": "biomeedit",
+  "name": "BiomeEdit",
+  "description": "Changes the biome for specified area.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["infinitewarp"],
+  "credits": "thanks to a pack of pseudoephedrine and a bottle of nyquil",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
