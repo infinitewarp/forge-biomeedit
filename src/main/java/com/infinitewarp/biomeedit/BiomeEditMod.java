@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mod(modid = BiomeEditMod.MODID, name = BiomeEditMod.NAME, version = BiomeEditMod.VERSION, serverSideOnly=true, acceptableRemoteVersions="*")
 public class BiomeEditMod
@@ -50,5 +51,12 @@ public class BiomeEditMod
 
     public static List<String> getBiomeNames() {
         return Collections.unmodifiableList(biomeNames);
+    }
+
+    public static List<String> getBiomeNames(String startingWith) {
+        if (startingWith.length() > 0) {
+            return getBiomeNames().stream().filter(n -> n.startsWith(startingWith)).collect(Collectors.toList());
+        }
+        return getBiomeNames();
     }
 }

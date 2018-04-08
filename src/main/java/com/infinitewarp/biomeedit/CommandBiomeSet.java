@@ -125,7 +125,7 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 5) {
-            return BiomeEditMod.getBiomeNames();
+            return BiomeEditMod.getBiomeNames(args[4]);
         }
         return new ArrayList<>();
     }
