@@ -25,7 +25,7 @@ public class CommandBiomeGet extends CommandBase implements ICommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/biomeget <z> <x> displays biome info for coordinate (x,z)";
+        return "/biomeget <x> <z> displays biome info for coordinate (x,z)";
     }
 
     @Override
