@@ -30,6 +30,11 @@ public class CommandBiomeGet extends CommandBase implements ICommand {
     }
 
     @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length < 2) {
             throw new WrongUsageException(getUsage(sender), new Object[0]);
