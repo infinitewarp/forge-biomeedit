@@ -35,8 +35,7 @@ public class CommandBiomeGet extends CommandBase implements ICommand {
     }
 
     @Override
-    public int getRequiredPermissionLevel()
-    {
+    public int getRequiredPermissionLevel() {
         return 0;
     }
 

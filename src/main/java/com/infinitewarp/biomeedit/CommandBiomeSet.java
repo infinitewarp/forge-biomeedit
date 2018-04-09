@@ -39,8 +39,7 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
     }
 
     @Override
-    public int getRequiredPermissionLevel()
-    {
+    public int getRequiredPermissionLevel() {
         return 3; // limits to op or console user
     }
 
