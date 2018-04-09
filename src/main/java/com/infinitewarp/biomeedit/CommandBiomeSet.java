@@ -80,7 +80,7 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
                             int biomeArrayPos = (posZ & 15) << 4 | (posX & 15);
                             biomeArray[biomeArrayPos] = biomeIdAsByte;
                             // sender.sendMessage(new TextComponentString(String.format("set %s at x=%s,z=%s", newBiomeName, posX, posZ)));
-                            System.out.println(String.format("set %s at x=%s,z=%s", newBiomeName, posX, posZ));
+                            BiomeEditMod.logger.info(String.format("set %s at x=%s,z=%s", newBiomeName, posX, posZ));
                         }
                     }
                 }

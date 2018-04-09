@@ -21,7 +21,7 @@ public class BiomeEditMod
     public static final String NAME = "BiomeEdit";
     public static final String VERSION = "%VERSION%";
 
-    private static Logger logger;
+    static Logger logger;
 
     private static List<String> biomeNames = new ArrayList<String>();
 
