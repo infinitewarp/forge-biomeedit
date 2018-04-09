@@ -7,7 +7,7 @@
   "mcversion": "${mcversion}",
   "url": "https://github.com/infinitewarp/forge-biomeedit",
   "updateUrl": "",
-  "authorList": ["infinitewarp"],
+  "authorList": ["Brad Smith"],
   "credits": "thanks to a pack of pseudoephedrine and a bottle of nyquil",
   "logoFile": "assets/biomeedit/textures/logo.png",
   "screenshots": [],
