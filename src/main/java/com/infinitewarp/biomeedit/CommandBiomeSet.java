@@ -15,13 +15,11 @@ import net.minecraft.world.chunk.Chunk;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandBiomeSet extends CommandBase implements ICommand {
-    private static final String name = "biomeset";
-    private static final String usage = "/biomeset <x1> <z1> <x2> <z2> <biomename> set specified biome over region x1,z1 to x2,z2";
-    private static final List aliases = Arrays.asList("bset");
+    private static final String name = "bset";
+    private static final String usage = "/bset <x1> <z1> <x2> <z2> <biomename> set specified biome over region x1,z1 to x2,z2";
 
     @Override
     public String getName() {
@@ -31,11 +29,6 @@ public class CommandBiomeSet extends CommandBase implements ICommand {
     @Override
     public String getUsage(ICommandSender sender) {
         return usage;
-    }
-
-    @Override
-    public List getAliases() {
-        return aliases;
     }
 
     @Override
