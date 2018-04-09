@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CommandBiomeGet extends CommandBase implements ICommand {
     private static final String name = "biomeget";
-    private static final String usage = "/biomeget <x> <z> displays biome info for coordinate (x,z)";
+    private static final String usage = "/biomeget [<x> <z>] displays biome info for coordinate or current location";
     private static final List aliases = Arrays.asList("bget");
 
     @Override
@@ -47,16 +47,18 @@ public class CommandBiomeGet extends CommandBase implements ICommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length < 2) {
+        if (args.length != 0 && args.length != 2) {
             throw new WrongUsageException(getUsage(sender), new Object[0]);
         }
 
-        BlockPos basePos = sender.getPosition();
-        BlockPos pos = new BlockPos(
-                parseDouble((double)basePos.getX(), args[0], false),
-                (double)basePos.getY(),
-                parseDouble((double)basePos.getZ(), args[1], false)
-        );
+        BlockPos pos = sender.getPosition();
+        if (args.length == 2) {
+            pos = new BlockPos(
+                    parseDouble((double)pos.getX(), args[0], false),
+                    (double)pos.getY(),
+                    parseDouble((double)pos.getZ(), args[1], false)
+            );
+        }
 
         World world = sender.getEntityWorld();
 //        TODO why is getBiomeName broken? It throws java.lang.NoSuchMethodError: net.minecraft.world.biome.Biome.getBiomeName()Ljava/lang/String
