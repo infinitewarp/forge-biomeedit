@@ -11,16 +11,27 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CommandBiomeGet extends CommandBase implements ICommand {
+    private static final String name = "biomeget";
+    private static final String usage = "/biomeget <x> <z> displays biome info for coordinate (x,z)";
+    private static final List aliases = Arrays.asList("bget");
 
     @Override
     public String getName() {
-        return "biomeget";
+        return name;
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/biomeget <x> <z> displays biome info for coordinate (x,z)";
+        return usage;
+    }
+
+    @Override
+    public List getAliases() {
+        return aliases;
     }
 
     @Override

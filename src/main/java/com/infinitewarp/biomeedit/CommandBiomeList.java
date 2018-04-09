@@ -10,18 +10,27 @@ import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommandBiomeList extends CommandBase implements ICommand {
+    private static final String name = "biomelist";
+    private static final String usage = "/biomelist prints list of allowed biome types";
+    private static final List aliases = Arrays.asList("blist");
 
     @Override
     public String getName() {
-        return "biomelist";
+        return name;
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/biomelist prints list of allowed biome types";
+        return usage;
+    }
+
+    @Override
+    public List getAliases() {
+        return aliases;
     }
 
     @Override
