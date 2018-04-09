@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mod(modid = BiomeEditMod.MODID, name = BiomeEditMod.NAME, version = BiomeEditMod.VERSION, serverSideOnly=true, acceptableRemoteVersions="*")
+@Mod(modid = BiomeEditMod.MODID, name = BiomeEditMod.NAME, version = BiomeEditMod.VERSION, acceptableRemoteVersions="*")
 public class BiomeEditMod
 {
     public static final String MODID = "biomeedit";
